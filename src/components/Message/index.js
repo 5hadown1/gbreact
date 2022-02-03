@@ -1,3 +1,3 @@
 import "./styles.css";
 
-export const Message = ({ text }) => <h3 className="text">{ text }</h3>;
+export const Message = ({ author, text }) => <span className="text">{ author } : { text }</span>;
