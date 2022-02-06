@@ -10,6 +10,7 @@ export const Form = ({ onSubmit }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         onSubmit({author: "Me", text: value});
+        setValue("");
     }
 
     return (

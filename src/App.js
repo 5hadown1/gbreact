@@ -4,16 +4,23 @@ import { Form } from './components/Form';
 import './App.css';
 
 function App() {
-const [messageList, setMessageList] = useState([{}]);
-	console.log(messageList);
+	const [messageList, setMessageList] = useState([]);
 
 	const handleAddMessage = ({author, text}) => {
 		setMessageList([...messageList, {author: author, text: text}]);
 	};
 
 	useEffect(() => {
-		if (messageList[messageList.length - 1].author === "Me") {
-			setMessageList([...messageList, {author: 'Robot', text: 'I send your message'}])
+		let timeout;
+
+		timeout = setTimeout(() => {
+			if (messageList[messageList.length - 1]?.author === "Me") {
+				setMessageList([...messageList, {author: 'Robot', text: 'I send your message'}])
+			}
+		}, 1500); 
+
+		return () => {
+			clearTimeout(timeout);
 		}
 	}, [messageList]);
 
