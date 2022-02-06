@@ -1,28 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
 import { Message } from './components/Message';
+import { Form } from './components/Form';
+import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <Message text="Props message"/>
-      </header>
-    </div>
-  );
+	const [messageList, setMessageList] = useState([]);
+
+	const handleAddMessage = ({author, text}) => {
+		setMessageList([...messageList, {author: author, text: text}]);
+	};
+
+	useEffect(() => {
+		let timeout;
+
+		timeout = setTimeout(() => {
+			if (messageList[messageList.length - 1]?.author === "Me") {
+				setMessageList([...messageList, {author: 'Robot', text: 'I send your message'}])
+			}
+		}, 1500); 
+
+		return () => {
+			clearTimeout(timeout);
+		}
+	}, [messageList]);
+
+	return (
+		<div className="App">
+			<header className="App-header">
+				{messageList.map(({author, text}) => (
+					<Message text={text} author={author}/>
+				))}
+				<Form onSubmit={handleAddMessage} />
+			</header>
+		</div>
+	);
 }
 
 export default App;
-
