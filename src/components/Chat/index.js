@@ -6,15 +6,10 @@ import { Navigate, useParams } from "react-router";
 
 import "../../App.css";
 
-export function Chat() {
+export function Chat( { messages, addMessage } ) {
 	const params = useParams();
 	const { chatId } = params;
 
-	const [messageList, setMessageList] = useState({
-		chat1: [],
-		chat2: [],
-		chat3: [],
-	});
 	const messagesEnd = useRef();
 
 	const handleAddMessage = (text) => {
@@ -27,10 +22,7 @@ export function Chat() {
 			author: author,
 			id: `msg-${Date.now()}`,
 		};
-		setMessageList((prevMessageList) => ({
-			...prevMessageList,
-			[chatId]: [...prevMessageList[chatId], newMsg],
-		}));
+		addMessage(chatId, newMsg);
 	};
 
 	useEffect(() => {
@@ -38,7 +30,7 @@ export function Chat() {
 		let timeout;
 
 		timeout = setTimeout(() => {
-			if (messageList[chatId]?.[messageList[chatId].length - 1]?.author === AUTHORS.ME) {
+			if (messages[chatId]?.[messages[chatId].length - 1]?.author === AUTHORS.ME) {
 				sendMessage('I send your message', AUTHORS.BOT)
 			}
 		}, 1500); 
@@ -46,16 +38,16 @@ export function Chat() {
 		return () => {
 			clearTimeout(timeout);
 		}
-	}, [messageList]);
+	}, [messages]);
 
-	if (!messageList[chatId]) {
+	if (!messages[chatId]) {
 		return <Navigate to="/chats" replace />;
 	}
 
 	return (
 		<div className="App">
 			<header className="App-header">
-				<MessageList messages={messageList[chatId]} />
+				<MessageList messages={messages[chatId]} />
 				<Form onSubmit={handleAddMessage} />
 			</header>
 		</div>
