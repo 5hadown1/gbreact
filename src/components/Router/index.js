@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import { Chat } from "../Chat";
 import { ChatList } from "../ChatList";
 import { Profile } from "../Profile";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addChat, deleteChat } from "../../store/chats/actions";
 import { addMessage } from "../../store/messages/actions";
@@ -11,39 +10,12 @@ import { selectMessages } from "../../store/messages/selectors";
 
 const Home = () => <h2>Home page</h2>;
 
-const initialChats = [
-	{
-		name: "Chat 1",
-		id: "chat1",
-	},
-	{
-		name: "Chat 2",
-		id: "chat2",
-	},
-	{
-		name: "Chat 3",
-		id: "chat3",
-	},
-];
-
-const initialMessages = initialChats.reduce((acc, el) => {
-	acc[el.id] = [];
-	return acc;
-}, {});
-
 export const Router = () => {
-	//const [chatList, setChatList] = useState(initialChats);
-	//const [messages, setMessages] = useState(initialMessages);
-
 	const chatList = useSelector(selectChats);
 	const messages = useSelector(selectMessages);
 	const dispatch = useDispatch();
 
 	const handleAddMessage = (chatId, newMsg) => {
-		// setMessages((prevMessageList) => ({
-		// 	...prevMessageList,
-		// 	[chatId]: [...prevMessageList[chatId], newMsg],
-		// }));
 		dispatch(addMessage(chatId, newMsg));
 	};
 
@@ -56,24 +28,10 @@ export const Router = () => {
 		};
 
 		dispatch(addChat(newId, newChatName));
-		//setChatList((prevChatList) => [...prevChatList, newChat]);
-		// setMessages((prevMessages) => ({
-		// 	...prevMessages,
-		// 	[newId]: [],
-		// }));
 	};
 
 	const handleDeleteChat = (idToDelete) => {
-		// setChatList((prevChatList) => prevChatList.filter(
-		// 	chat => chat.id !== idToDelete
-		// ));
 		dispatch(deleteChat(idToDelete));
-		// setMessages((prevMessages) => {
-		// 	const newMsgs = {...prevMessages};
-
-		// 	delete newMsgs[idToDelete];
-		// 	return newMsgs;
-		// })
 	};
 
 	return (
