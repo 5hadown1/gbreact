@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { MessageList } from "../MessageList";
 import { Form } from '../Form';
 import { AUTHORS } from "../../utils/constants";
 import { Navigate, useParams } from "react-router";
 
 import "../../App.css";
+import { addMessageWithThunk } from "../../store/messages/actions";
+import { useDispatch } from "react-redux";
 
-export function Chat( { messages, addMessage } ) {
+export function Chat( { messages } ) {
 	const params = useParams();
+	const dispatch = useDispatch();
 	const { chatId } = params;
 
 	const messagesEnd = useRef();
@@ -22,22 +25,11 @@ export function Chat( { messages, addMessage } ) {
 			author: author,
 			id: `msg-${Date.now()}`,
 		};
-		addMessage(chatId, newMsg);
+		dispatch(addMessageWithThunk(chatId, newMsg));
 	};
 
 	useEffect(() => {
 		messagesEnd.current?.scrollIntoView();
-		let timeout;
-
-		timeout = setTimeout(() => {
-			if (messages[chatId]?.[messages[chatId].length - 1]?.author === AUTHORS.ME) {
-				sendMessage('I send your message', AUTHORS.BOT)
-			}
-		}, 1500); 
-
-		return () => {
-			clearTimeout(timeout);
-		}
 	}, [messages]);
 
 	if (!messages[chatId]) {
